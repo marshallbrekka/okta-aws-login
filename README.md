@@ -1,0 +1,1 @@
+download lastest (0.0.1)[https://marshallbrekka.github.io/okta-aws-login/releases/0.0.1.zip]
