@@ -10,12 +10,12 @@ import "github.com/go-ini/ini"
 const configPath = ".aws/credentials"
 
 type ProfileSettings struct {
-	ProfileName string
-	AccessKeyId string
+	ProfileName     string
+	AccessKeyId     string
 	SecretAccessKey string
-	SessionToken string
-	Region string
-	Output string
+	SessionToken    string
+	Region          string
+	Output          string
 }
 
 func samlAssertionToArns(samlAssertion string) (string, string, error) {
@@ -31,8 +31,8 @@ func samlAssertionToArns(samlAssertion string) (string, string, error) {
 
 func assumeRole(samlAssertion string, principalArn string, roleArn string) (sts.Credentials, error) {
 	req := sts.AssumeRoleWithSAMLInput{
-		PrincipalArn: &principalArn,
-		RoleArn: &roleArn,
+		PrincipalArn:  &principalArn,
+		RoleArn:       &roleArn,
 		SAMLAssertion: &samlAssertion,
 	}
 	client := sts.New(session.New(&aws.Config{Region: aws.String("us-west-2")}))

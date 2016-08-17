@@ -12,12 +12,12 @@ import "io/ioutil"
 import "strings"
 
 type sessionResponse struct {
-	Status   string `json:status`
+	Status       string `json:status`
 	SessionToken string `json:sessionToken`
 }
 
 type SAMLResponse struct {
-	SessionId string
+	SessionId     string
 	SAMLAssertion string
 }
 
@@ -28,12 +28,12 @@ func samlResponseToSAMLAssertion(body io.ReadCloser) (string, error) {
 		line, err := reader.ReadString('\n')
 		if strings.Contains(line, "SAMLResponse") {
 			startIndex := strings.Index(line, "value=") + 7
-			endIndex   := strings.Index(line, "/>") - 1
+			endIndex := strings.Index(line, "/>") - 1
 			saml := line[startIndex:endIndex]
 			saml = strings.Replace(saml, "&#x2b;", "+", -1)
 			saml = strings.Replace(saml, "&#x3d;", "=", -1)
 			return saml, nil
-		} else if err != nil  {
+		} else if err != nil {
 			return "", errors.New("SAML not found")
 		}
 	}
@@ -77,7 +77,7 @@ func SessionIdToSAMLAssertion(appUrl string, sessionId string) (SAMLResponse, er
 
 func SessionTokenToSAMLAssertion(appUrl string, sessionToken string) (SAMLResponse, error) {
 	jar, _ := cookiejar.New(nil)
-	return getSAMLAssertion(appUrl + "?onetimetoken=" + sessionToken, jar)
+	return getSAMLAssertion(appUrl+"?onetimetoken="+sessionToken, jar)
 }
 
 // Given the organization name ({org}.okta.com), a username and password,

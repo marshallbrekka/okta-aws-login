@@ -20,13 +20,13 @@ const ConfigFile = ".okta-aws-login"
 
 type Config struct {
 	IdpAwsUrl string
-	Region string
+	Region    string
 }
 
 func homeDir() string {
 	usr, err := user.Current()
 	if err != nil {
-		log.Fatal( err )
+		log.Fatal(err)
 		panic("User not found")
 	}
 	return usr.HomeDir
@@ -47,7 +47,7 @@ func sessionId() (string, error) {
 }
 
 func saveSessionId(sessionId string) error {
-	return ioutil.WriteFile(homeDir() + "/" + SessionFile, []byte(sessionId), 0644)
+	return ioutil.WriteFile(homeDir()+"/"+SessionFile, []byte(sessionId), 0644)
 }
 
 func normalizeUrl(appUrl string) string {
@@ -67,7 +67,7 @@ func readConfig() *Config {
 			section := config.Section("default")
 			return &Config{
 				IdpAwsUrl: section.Key("idp_aws_url").Value(),
-				Region: section.Key("region").Value(),
+				Region:    section.Key("region").Value(),
 			}
 		}
 	} else {
@@ -93,7 +93,7 @@ func promptUrl(reader *bufio.Reader, originalUrl string) string {
 		}
 		fmt.Print(prompt)
 		url, _ := reader.ReadString('\n')
-		url = url[:len(url) -1]
+		url = url[:len(url)-1]
 		if url != "" {
 			return url
 		} else if originalUrl != "" {
@@ -111,7 +111,7 @@ func promptRegion(reader *bufio.Reader, originalRegion string) string {
 
 	fmt.Print("AWS Region [default " + originalRegion + "]: ")
 	region, _ := reader.ReadString('\n')
-	region = region[:len(region) -1]
+	region = region[:len(region)-1]
 	if region != "" {
 		return region
 	} else {
@@ -150,7 +150,7 @@ func getSAMLAssertionFromAuth(appUrl string) string {
 			samlResponse, err := okta.SessionTokenToSAMLAssertion(appUrl, sessionToken)
 			if err != nil {
 				fmt.Println(err)
-				break;
+				break
 			} else {
 				saveSessionId(samlResponse.SessionId)
 				return samlResponse.SAMLAssertion
@@ -182,7 +182,7 @@ func main() {
 	flag.Parse()
 
 	conf := readConfig()
-	if conf == nil{
+	if conf == nil {
 		conf = setupConfig(&Config{})
 		saveConfig(conf)
 	} else if *configFlag {
@@ -197,12 +197,12 @@ func main() {
 			panic(err)
 		} else {
 			pref := oktaaws.ProfileSettings{
-				ProfileName: "default",
-				AccessKeyId: *creds.AccessKeyId,
+				ProfileName:     "default",
+				AccessKeyId:     *creds.AccessKeyId,
 				SecretAccessKey: *creds.SecretAccessKey,
-				SessionToken: *creds.SessionToken,
-				Region: conf.Region,
-				Output: "json",
+				SessionToken:    *creds.SessionToken,
+				Region:          conf.Region,
+				Output:          "json",
 			}
 			err := oktaaws.SaveConfig(homeDir(), pref)
 			if err != nil {
