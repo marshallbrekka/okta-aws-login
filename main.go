@@ -5,7 +5,6 @@ import "flag"
 import "os/user"
 import "errors"
 import "os"
-import "log"
 import "io/ioutil"
 import "bufio"
 import "net/url"
@@ -14,6 +13,7 @@ import "github.com/marshallbrekka/okta-aws-login/okta"
 import "github.com/marshallbrekka/okta-aws-login/oktaaws"
 import "github.com/go-ini/ini"
 import "github.com/howeyc/gopass"
+import log "github.com/Sirupsen/logrus"
 
 const SessionFile = ".okta-aws-login-sid"
 const ConfigFile = ".okta-aws-login"
@@ -178,8 +178,20 @@ func getSAMLAssertion(appUrl string) string {
 }
 
 func main() {
+	// setup and parse cli fags
 	configFlag := flag.Bool("configure", false, "Configure the tool")
+	verboseFlag := flag.Bool("verbose", false, "Enable verbose logging")
 	flag.Parse()
+
+	if *verboseFlag {
+		log.SetLevel(log.DebugLevel)
+	} else {
+		log.SetLevel(log.InfoLevel)
+	}
+	// Log as JSON instead of the default ASCII formatter.
+  // log.SetFormatter(&log.JSONFormatter{})
+  // Output to stderr instead of stdout, could also be a file.
+  log.SetOutput(os.Stderr)
 
 	conf := readConfig()
 	if conf == nil {

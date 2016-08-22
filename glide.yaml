@@ -1,0 +1,39 @@
+package: github.com/marshallbrekka/okta-aws-login
+import:
+- package: github.com/aws/aws-sdk-go
+  version: ~1.4.2
+  subpackages:
+  - aws
+  - aws/awserr
+  - aws/awsutil
+  - aws/client
+  - aws/client/metadata
+  - aws/corehandlers
+  - aws/credentials
+  - aws/credentials/ec2rolecreds
+  - aws/credentials/endpointcreds
+  - aws/credentials/stscreds
+  - aws/defaults
+  - aws/ec2metadata
+  - aws/request
+  - aws/session
+  - aws/signer/v4
+  - private/endpoints
+  - private/protocol
+  - private/protocol/query
+  - private/protocol/query/queryutil
+  - private/protocol/rest
+  - private/protocol/xml/xmlutil
+  - service/sts
+- package: github.com/go-ini/ini
+  version: ~1.20.0
+- package: github.com/howeyc/gopass
+  version: b63a7d07e65df376d14e2d72907a93d4847dffe4
+- package: github.com/jmespath/go-jmespath
+  version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- package: golang.org/x/crypto
+  version: a8a4eedf8c97852389ea5f2c252660d3616af041
+  subpackages:
+  - ssh/terminal
+- package: github.com/Sirupsen/logrus
+  version: ~0.10.0

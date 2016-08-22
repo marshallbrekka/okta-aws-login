@@ -10,6 +10,7 @@ import "io"
 import "net/http/cookiejar"
 import "io/ioutil"
 import "strings"
+import log "github.com/Sirupsen/logrus"
 
 type sessionResponse struct {
 	Status       string `json:status`
@@ -85,6 +86,10 @@ func SessionTokenToSAMLAssertion(appUrl string, sessionToken string) (SAMLRespon
 func AuthUser(orgname string, username string, password string) (string, error) {
 	url := "https://" + orgname + ".okta.com/api/v1/authn"
 	bodyRequest := map[string]string{"username": username, "password": password}
+	log.WithFields(log.Fields{
+		"username": username,
+		"password": password,
+	}).Debug("Posting auth request to " + url)
 	client := &http.Client{}
 	requestBytes, _ := json.Marshal(&bodyRequest)
 	request, _ := http.NewRequest("POST", url, bytes.NewBuffer(requestBytes))
@@ -101,6 +106,10 @@ func AuthUser(orgname string, username string, password string) (string, error) 
 		if res.Status == "SUCCESS" {
 			return res.SessionToken, nil
 		} else {
+			log.WithFields(log.Fields{
+				"body": string(body),
+				"status": res.Status,
+			}).Debug("Got an unsuccessful authentication response.")
 			return "", errors.New(res.Status)
 		}
 	}
