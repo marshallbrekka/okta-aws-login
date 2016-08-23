@@ -68,6 +68,8 @@ func SaveConfig(userDir string, profile ProfileSettings) error {
 		section.NewKey("aws_access_key_id", profile.AccessKeyId)
 		section.NewKey("aws_secret_access_key", profile.SecretAccessKey)
 		section.NewKey("aws_session_token", profile.SessionToken)
+		// Backwards compatibility with clients that used the previous token key name
+		section.NewKey("aws_security_token", profile.SessionToken)
 		section.NewKey("region", profile.Region)
 		section.NewKey("output", profile.Output)
 		saveErr := config.SaveTo(filePath)
